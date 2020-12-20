@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>文件</title>
+    <style>
+        #parent{
+            position: relative;
+            margin: 50px auto;
+            padding: 0;
+            width: 500px;
+            height: 309px;
+        }
+
+        #uls{
+            position: relative;
+            margin: 0;
+            padding: 0;
+            width: 500px;
+            height: 309px;
+            overflow: hidden;
+        }
+
+        #img_ul{
+            position: absolute;
+            margin: 0;
+            padding: 0;
+            left: 0;
+            top: 0;
+            width: 3000px;           /*多留出一张图片的宽度！*/
+            list-style: none;
+        }
+        #img_ul li{
+            float: left;
+            margin: 0;
+            padding: 0;
+            width: 500px;
+            height: 309px;
+        }
+        #img_ul li img{
+            width: 500px;
+            height: 309px;
+        }
+
+        #litCir_ul{
+            position: absolute;
+            margin: 0;
+            padding: 0;
+            right: 10px;
+            bottom: 10px;
+            list-style: none;
+        }
+        #litCir_ul li{
+            margin: 0;
+            padding: 0;
+            float: left;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            line-height: 20px;
+            border-radius: 50%; 
+            margin-left:10px ;
+            cursor: pointer;
+        }
+
+        li.active{
+            background-color: white;
+        }
+        li.quiet{
+            background-color: #1e90ff;
+        }
+
+        #buttons{
+            margin: 0;
+            padding: 0;
+            display: none;
+        }
+        #buttons span{
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            top: 50%;
+            margin-top: -20px;
+            line-height: 40px;
+            text-align: center;
+            font-weight: bold;
+            font-family: Simsun;
+            font-size: 30px;
+            border: 1px solid #fff;
+            opacity: 0.3;
+            cursor: pointer;
+            color: #fff;
+            background: black;
+        }
+        #left{
+            left: 5px;
+        }
+        #right{
+            left: 100%;
+            margin-left: -45px;
+        }
+        .navbar {
+            overflow: hidden;
+            background-color: #333;
+        }
+        .navbar a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 20px;
+            text-decoration: none;
+        }
+        .navbar a.right {
+            float: right;
+        }
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+ 
+        .row {  
+            display: -ms-flexbox; 
+            display: flex;
+            -ms-flex-wrap: wrap; 
+            flex-wrap: wrap;
+        }
+        .side {
+            -ms-flex: 30%; 
+            flex: 30%;
+            background-color: #f1f1f1;
+            padding: 20px;
+        }
+        .main {   
+            -ms-flex: 70%;  IE10 
+            flex: 70%;
+            background-color: white;
+            padding: 20px;
+        }
+        .fakeimg {
+            background-color: #aaa;
+            width: 100%;
+            padding: 20px;
+        }
+        .footer {
+            padding: 20px;
+            text-align: center;
+            background: #ddd;
+        }
+        .leftscore{
+            padding: 20px;
+            text-align: center;
+            background: #ddd;
+
+        }
+    </style>
+</head>
+<body>
+    <div id= "parent">
+        <div id="uls">
+            <ul id="img_ul">
+                <li><img src="华1.jpg"/></li>
+                <li><img src="华2.jpg"/></li>
+                <li><img src="华3.jpg"/></li>
+                <li><img src="华4.jpg"/></li>
+                <li><img src="5.jpg"/></li>
+            </ul>
+            <ul id='litCir_ul'></ul>
+        </div>
+        <div id="buttons">
+            <span id="left">&lt;</span>
+            <span id="right">&gt;</span>
+        </div>
+    </div>
+    <div class="navbar">
+        <a href="https://baike.baidu.com/item/%E5%8D%8E%E6%99%A8%E5%AE%87/6064097?fr=aladdin">歌手详情</a>
+        <a href="https://www.pythonke.com/zj/huachenyu/">专辑</a>
+        <a href="https://music.163.com/#/search/m/?s=%E7%83%9F%E7%81%AB%E9%87%8C%E7%9A%84%E5%B0%98%E5%9F%83&type=1&market=baiduqk">歌曲</a>
+        <a href="#" class="right">下一位歌手</a>
+    </div>
+    <div class="leftscore">
+        <p>你想为华晨宇打几分呢</p>
+        <input id="inputScore" type="text" value="" name=""/>
+        <input id="submitScore" type="button" value="提交" onclick="submitscore()"/>
+    </div>
+    <div class="footer">
+        <h2 id="p1" style="color:red;">华晨宇 来自火星的歌手</h2>
+    </div>
+    
+    <script type="text/javascript">
+        var parent = document.getElementById("parent");
+        var img_ul = document.getElementById("img_ul");
+        var litCir_ul = document.getElementById("litCir_ul");
+        var buttons = document.getElementById("buttons");
+        var cLis =litCir_ul.children;
+        var submit=document.getElementById("submitScore");
+        var inputScore=document.getElementById("inputScore");
+        var footer=document.getElementsByClassName("footer");
+        var p1=document.getElementById("p1");
+
+        var len = img_ul.children.length;     
+        var width = parent.offsetWidth;       
+        var rate = 15;                        
+        var times = 1;                        
+        var gap = 2000;                       
+        var timer = null;                     
+        var picN = 0;                         
+        var cirN = 0;                         
+        var temp;
+        var colortimer;
+        function submitscore(){
+            if((inputScore>0)&&(inputScore<=5)){
+                alert("谢谢你的评价");
+            }else{
+                alert("感谢你的支持");
+            }
+        }
+        p1.onclick=function(){
+            var color="#";
+            for(var i=0;i<3;i++)
+            {
+                color+=parseInt(Math.random()*9);
+            }
+            document.getElementById("p1").style.color=""+color;
+
+        }
+        for (var i=0; i<len; i++){
+            var a_li = document.createElement("li");
+            a_li.className = 'quiet';
+            litCir_ul.appendChild(a_li);
+        }
+        litCir_ul.children[0].className = "active";
+
+        function Roll(distance){                                        
+            clearInterval(img_ul.timer);                                     
+            var speed = img_ul.offsetLeft < distance ?  rate : (0-rate);     
+
+            img_ul.timer = setInterval(function(){                          
+            img_ul.style.left = img_ul.offsetLeft + speed + "px";        
+            var leave = distance - img_ul.offsetLeft;                    
+                if (Math.abs(leave) <= Math.abs(speed)) {                    
+                    clearInterval(img_ul.timer);
+                    img_ul.style.left = distance + "px";
+                }
+            },10);
+        }
+        img_ul.appendChild(img_ul.children[0].cloneNode(true));
+
+        function autoRun(){
+            picN++;
+            cirN++;
+            if(picN > len){                  
+                img_ul.style.left = 0;       
+                picN = 1;                    
+            }
+            Roll(-picN*width);
+    
+            if(cirN > len-1){                
+                cirN = 0;                 
+            }
+            for(var i=0; i<len; i++){
+                cLis[i].className = "quiet";
+            }
+            cLis[cirN].className = "active";
+        }
+
+        for(var i=0; i<len; i++){
+            cLis[i].index = i;
+            cLis[i].onmouseover = function(){
+                for(var j=0; j<len; j++){
+                    cLis[j].className = "quiet";
+                }
+                this.className = "active";
+                temp = cirN;
+                picN = cirN = this.index;
+                times = Math.abs(this.index - temp);  
+                rate = rate*times;                    
+                Roll(-this.index * width);
+                rate = 15;
+            }
+        }
+
+        parent.onmouseover = function(){
+            clearInterval(timer);
+            buttons.style.display = 'block';
+        }
+        parent.onmouseout = function(){
+            timer = setInterval(autoRun, gap);
+            buttons.style.display = 'none';
+        }
+
+    
+        buttons.children[0].onclick = function(){ 
+            picN--;
+            cirN--;
+            if(picN < 0){                               
+                img_ul.style.left = -len*width + "px";  
+                picN = cirN = len-1;
+            }
+            Roll(-picN*width);
+            if(cirN < 0){
+                cirN = len-1;
+            }
+            for(var i=0; i<len; i++){
+                cLis[i].className = "quiet";
+            }
+            cLis[cirN].className = "active";
+        }
+    
+        buttons.children[1].onclick = autoRun;
+    </script>
+</body>
+</html>
